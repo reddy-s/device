@@ -1,0 +1,43 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+group 'com.virturelabs'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url 'https://pkgs.dev.azure.com/reddyhorcrux/_packaging/contract/maven/v1'
+        credentials {
+            username "AZURE_ARTIFACTS"
+            password System.getenv("AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT") ?: "${azureArtifactsGradleAccessTokenContract}"
+        }
+    }
+}
+
+publishing {
+    publications {
+        myLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url 'https://pkgs.dev.azure.com/reddyhorcrux/_packaging/device/maven/v1'
+            credentials {
+                username "AZURE_ARTIFACTS"
+                password System.getenv("AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE") ?: "${azureArtifactsGradleAccessTokenDevice}"
+            }
+        }
+    }
+}
+
+dependencies {
+    compile group: 'com.virtuelabs', name: 'contract', version: '1.0-SNAPSHOT'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

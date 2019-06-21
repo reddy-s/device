@@ -1,0 +1,46 @@
+pool:
+  vmImage: 'Ubuntu 16.04'
+trigger:
+  branches:
+    include:
+      - master
+      - feature/*
+      - bug/*
+
+pr:
+  branches:
+    include:
+      - master
+
+steps:
+
+  - checkout: self
+    persistCredentials: true
+
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: true
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'build'
+    env:
+      AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE)
+
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'publish'
+    env:
+      AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE)
