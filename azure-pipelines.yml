@@ -83,7 +83,7 @@ steps:
       jdkArchitectureOption: 'x64'
       publishJUnitResults: false
       testResultsFiles: '**/TEST-*.xml'
-      tasks: 'dockerPush'
+      tasks: 'dockerPush --info'
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     env:
       AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE)
