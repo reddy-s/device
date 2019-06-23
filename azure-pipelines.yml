@@ -27,10 +27,22 @@ steps:
       jdkArchitectureOption: 'x64'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
-      tasks: 'build'
+      tasks: 'build --info'
     env:
       AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE)
       AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT)
+
+  - task: Gradle@2
+      inputs:
+        workingDirectory: ''
+        gradleWrapperFile: 'gradlew'
+        gradleOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: true
+        testResultsFiles: '**/TEST-*.xml'
+        tasks: 'docker --info'
 
   - task: Gradle@2
     inputs:
@@ -43,6 +55,28 @@ steps:
       publishJUnitResults: false
       testResultsFiles: '**/TEST-*.xml'
       tasks: 'publish'
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     env:
       AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE)
       AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT)
+
+  - script: |
+      docker login -u $DOCKER_ID -p $DOCKER_PASSWORD
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    env:
+      DOCKER_ID: $(DOCKER_ID)
+      DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+    displayName: 'Logging in to Docker'
+
+  - task: Gradle@2
+      inputs:
+        workingDirectory: ''
+        gradleWrapperFile: 'gradlew'
+        gradleOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: false
+        testResultsFiles: '**/TEST-*.xml'
+        tasks: 'dockerPUSH'
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')

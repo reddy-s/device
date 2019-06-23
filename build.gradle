@@ -1,7 +1,19 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.19.0"
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'com.palantir.docker'
 
 group 'io.virtuelabs'
 version '1.0-SNAPSHOT'
@@ -11,6 +23,7 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     mavenLocal()
+    jcenter()
     maven {
         url 'https://pkgs.dev.azure.com/reddyhorcrux/_packaging/contract/maven/v1'
         credentials {
@@ -40,4 +53,23 @@ publishing {
 dependencies {
     compile 'io.virtuelabs:contract:1.0-SNAPSHOT'
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.runtime.files.collect {"$it.name"}.join(' '),
+                'Main-Class': 'io.virtuelabs.device.Device'
+        )
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+docker {
+    name="reddys310/device:$version"
+    copySpec.from("build/libs").into("app")
+    dockerfile file("src/main/docker/Dockerfile")
+    noCache true
 }

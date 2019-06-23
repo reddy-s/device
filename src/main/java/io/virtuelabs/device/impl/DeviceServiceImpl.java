@@ -9,11 +9,15 @@ public class DeviceServiceImpl extends DeviceServiceGrpc.DeviceServiceImplBase {
 
   @Override
   public void sendEvent(DeviceRequest request, StreamObserver<DeviceResponse> responseObserver) {
+
+    System.out.println("Incoming request");
     responseObserver.onNext(
       DeviceResponse.newBuilder()
-        .setAnomaly(false)
+        .setAnomaly(true)
         .setMessage("Test Response")
         .build()
     );
+    System.out.println("Sending response");
+    responseObserver.onCompleted();
   }
 }
