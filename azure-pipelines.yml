@@ -45,7 +45,7 @@ steps:
       publishJUnitResults: false
       testResultsFiles: '**/TEST-*.xml'
       tasks: 'publish --info'
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/skip')
     env:
       AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE)
       AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT)
