@@ -3,7 +3,7 @@ apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-group 'io.virturelabs'
+group 'io.virtuelabs'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
