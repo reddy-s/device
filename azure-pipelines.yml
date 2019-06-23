@@ -40,9 +40,10 @@ steps:
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.8'
         jdkArchitectureOption: 'x64'
-        publishJUnitResults: true
-        testResultsFiles: '**/TEST-*.xml'
         tasks: 'docker --info'
+      env:
+        AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE)
+        AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT)
 
   - task: Gradle@2
     inputs:
@@ -80,3 +81,6 @@ steps:
         testResultsFiles: '**/TEST-*.xml'
         tasks: 'dockerPUSH'
       condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+      env:
+        AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_DEVICE)
+        AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT: $(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN_CONTRACT)
