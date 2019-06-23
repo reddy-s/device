@@ -12,7 +12,7 @@ public class DeviceServiceImpl extends DeviceServiceGrpc.DeviceServiceImplBase {
     responseObserver.onNext(
       DeviceResponse.newBuilder()
         .setAnomaly(false)
-        .setMessage("Test Value")
+        .setMessage("Test Response")
         .build()
     );
   }
