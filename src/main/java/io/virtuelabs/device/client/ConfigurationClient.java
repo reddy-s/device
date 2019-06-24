@@ -10,13 +10,12 @@ public class ConfigurationClient {
 
   public static ConfigResponse fetchDeviceConfig(DeviceRequest deviceRequest) {
     ConfigurationServiceGrpc.ConfigurationServiceBlockingStub configStub = ConfigurationServiceGrpc.newBlockingStub(DeviceChannelConfig.getConfigurationManagedChannel());
-    ConfigResponse configResponse = configStub
+    return configStub
       .sendEvent(ConfigRequest
         .newBuilder()
         .setDeviceId(deviceRequest.getDeviceId())
         .setDeviceType(deviceRequest.getDeviceType())
         .build()
     );
-    return configResponse;
   }
 }
