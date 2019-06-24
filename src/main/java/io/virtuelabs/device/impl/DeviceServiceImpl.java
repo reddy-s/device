@@ -2,9 +2,8 @@ package io.virtuelabs.device.impl;
 
 
 import io.grpc.stub.StreamObserver;
-import io.virtuelabs.contract.DeviceRequest;
-import io.virtuelabs.contract.DeviceResponse;
-import io.virtuelabs.contract.DeviceServiceGrpc;
+import io.virtuelabs.contract.*;
+import io.virtuelabs.device.client.ConfigurationClient;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,13 +15,22 @@ public class DeviceServiceImpl extends DeviceServiceGrpc.DeviceServiceImplBase {
   @Override
   public void sendEvent(DeviceRequest request, StreamObserver<DeviceResponse> responseObserver) {
 
+    String message;
     LOGGER.log(Level.INFO, "Received request form device: {0}", request.getDeviceId());
     try {
       LOGGER.log(Level.INFO, "Processing request form device: {0}", request.getDeviceId());
+      if (request.getRequestType() == RequestType.REGISTRATION){
+        LOGGER.log(Level.INFO, "Fetching Configuration from config server");
+        ConfigResponse configResponse = ConfigurationClient.fetchDeviceConfig(request);
+        message = String.format("Registration Event: Ping me every %d seconds", configResponse.getBeatFrequency());
+      } else {
+        message = "Non-Registration Event";
+      }
+
       responseObserver.onNext(
         DeviceResponse.newBuilder()
           .setAnomaly(true)
-          .setMessage("Test Response")
+          .setMessage(message)
           .build()
       );
     } catch (RuntimeException e) {
