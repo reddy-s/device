@@ -9,8 +9,8 @@ import io.virtuelabs.device.config.DeviceChannelConfig;
 public class ConfigurationClient {
 
   public static ConfigResponse fetchDeviceConfig(DeviceRequest deviceRequest) {
-    ConfigurationServiceGrpc.ConfigurationServiceBlockingStub configService = ConfigurationServiceGrpc.newBlockingStub(DeviceChannelConfig.getConfigurationManagedChannel());
-    ConfigResponse configResponse = configService
+    ConfigurationServiceGrpc.ConfigurationServiceBlockingStub configStub = ConfigurationServiceGrpc.newBlockingStub(DeviceChannelConfig.getConfigurationManagedChannel());
+    ConfigResponse configResponse = configStub
       .sendEvent(ConfigRequest
         .newBuilder()
         .setDeviceId(deviceRequest.getDeviceId())
