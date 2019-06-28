@@ -1,9 +1,9 @@
-package io.virtuelabs.device.impl;
+package io.virtuelabs.device.service.impl;
 
 
 import io.grpc.stub.StreamObserver;
 import io.virtuelabs.contract.*;
-import io.virtuelabs.device.client.ConfigurationClient;
+import io.virtuelabs.device.stub.ConfigurationClient;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

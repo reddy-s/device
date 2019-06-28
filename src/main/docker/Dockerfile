@@ -4,6 +4,7 @@ LABEL application=io.virtuelabs.device \
       maintainer=SangramReddy<reddy.horcrux@gmail.com>
 
 ARG GRPC_HEALTH_PROBE_VERSION=v0.3.0
+ENV RUN_PORT=10001
 
 COPY ./app/device-*.jar /app/app.jar
 
@@ -15,9 +16,7 @@ RUN addgroup -S virtuelabs && adduser -S virtuelabs -G virtuelabs && \
 
 WORKDIR /app
 
-ENV RUN_PORT=10001
-
-EXPOSE 10001
+EXPOSE $RUN_PORT
 
 USER virtuelabs
 

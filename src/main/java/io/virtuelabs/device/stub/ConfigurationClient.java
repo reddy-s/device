@@ -1,4 +1,4 @@
-package io.virtuelabs.device.client;
+package io.virtuelabs.device.stub;
 
 import io.virtuelabs.contract.ConfigRequest;
 import io.virtuelabs.contract.ConfigResponse;

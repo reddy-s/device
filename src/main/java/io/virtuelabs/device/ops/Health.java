@@ -1,4 +1,4 @@
-package io.virtuelabs.device.impl;
+package io.virtuelabs.device.ops;
 
 import grpc.health.v1.HealthOuterClass.HealthCheckResponse;
 import grpc.health.v1.HealthOuterClass.HealthCheckResponse.ServingStatus;
@@ -19,15 +19,14 @@ public class Health {
   public static class HealthImpl extends HealthGrpc.HealthImplBase {
     @Override
     public void check(HealthCheckRequest request, StreamObserver<HealthCheckResponse> responseObserver) {
-      LOGGER.log(Level.INFO, "Health check: Request received");
       String service = request.getService();
+      LOGGER.log(Level.INFO, "{0} Health check: Request received", service);
       if (service == null) {
         responseObserver.onError(
           new StatusException(Status.NOT_FOUND.withDescription("Unknown service")));
       } else {
-        LOGGER.log(Level.INFO, "Health check: Sending response");
-        HealthCheckResponse response =
-          HealthCheckResponse.newBuilder().setStatus(getServingStatus()).build();
+        LOGGER.log(Level.INFO, "{0} Health check: Sending response", service);
+        HealthCheckResponse response = HealthCheckResponse.newBuilder().setStatus(getServingStatus()).build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
       }
