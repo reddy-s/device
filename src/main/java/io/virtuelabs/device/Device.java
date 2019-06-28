@@ -3,6 +3,7 @@ package io.virtuelabs.device;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.virtuelabs.device.impl.DeviceServiceImpl;
+import io.virtuelabs.device.impl.HealthServiceImpl;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ public class Device {
         LOGGER.log(Level.INFO, "Preparing the DEVICE gRPC server for start up");
         Server server = ServerBuilder.forPort(runPort)
                 .addService(new DeviceServiceImpl())
+                .addService(new HealthServiceImpl())
                 .build();
         LOGGER.log(Level.INFO, "Starting DEVICE gRPC server");
         server.start();
