@@ -12,10 +12,11 @@ public class Device {
 
     private static final Logger LOGGER = Logger.getLogger(Device.class.getName());
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    private static final int runPort = Integer.parseInt(System.getenv("RUN_PORT"));
 
+    public static void main(String[] args) throws IOException, InterruptedException {
         LOGGER.log(Level.INFO, "Preparing the DEVICE gRPC server for start up");
-        Server server = ServerBuilder.forPort(10001)
+        Server server = ServerBuilder.forPort(runPort)
                 .addService(new DeviceServiceImpl())
                 .build();
         LOGGER.log(Level.INFO, "Starting DEVICE gRPC server");
