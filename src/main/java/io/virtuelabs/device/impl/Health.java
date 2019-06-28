@@ -11,36 +11,9 @@ import io.grpc.stub.StreamObserver;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public static class HealthServiceImpl extends HealthGrpc.HealthImplBase {
-
-  private static final Logger LOGGER = Logger.getLogger(HealthServiceImpl.class.getName());
-
-  @Override
-  public void check(HealthCheckRequest request,
-                    StreamObserver<HealthCheckResponse> responseObserver) {
-    LOGGER.log(Level.INFO, "Health check: Request received");
-    ServingStatus status = getStatus(request.getService());
-    if (status == null) {
-      responseObserver.onError(new StatusException(
-        Status.NOT_FOUND.withDescription("unknown service " + request.getService())));
-    } else {
-      HealthCheckResponse response = HealthCheckResponse.newBuilder().setStatus(status).build();
-      responseObserver.onNext(response);
-      LOGGER.log(Level.INFO, "Health check: Sending response");
-      responseObserver.onCompleted();
-    }
-  }
-
-  private ServingStatus getStatus(String service) {
-    LOGGER.log(Level.INFO, service);
-    return ServingStatus.SERVING;
-  }
-}
-
 /** gRPC Health Checking Protocol */
 public class Health {
-  private static final Logger LOGGER = Logger.getLogger(HealthServiceImpl.class.getName());
-  private static final String ACCEPTED_SERVICE = "ext.maps.booking.partner.v2.BookingService";
+  private static final Logger LOGGER = Logger.getLogger(Health.class.getName());
 
   /** The implementation of Health Checking Service. */
   public static class HealthImpl extends HealthGrpc.HealthImplBase {
@@ -48,7 +21,7 @@ public class Health {
     public void check(HealthCheckRequest request, StreamObserver<HealthCheckResponse> responseObserver) {
       LOGGER.log(Level.INFO, "Health check: Request received");
       String service = request.getService();
-      if (!service.equals(ACCEPTED_SERVICE)) {
+      if (service == null) {
         responseObserver.onError(
           new StatusException(Status.NOT_FOUND.withDescription("Unknown service")));
       } else {
