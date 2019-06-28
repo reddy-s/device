@@ -2,10 +2,10 @@ package io.virtuelabs.device.impl;
 
 import io.grpc.Status;
 import io.grpc.StatusException;
+import io.grpc.health.v1.HealthCheckRequest;
+import io.grpc.health.v1.HealthCheckResponse;
+import io.grpc.health.v1.HealthGrpc;
 import io.grpc.stub.StreamObserver;
-import io.virtuelabs.contract.HealthCheckRequest;
-import io.virtuelabs.contract.HealthCheckResponse;
-import io.virtuelabs.contract.HealthGrpc;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
