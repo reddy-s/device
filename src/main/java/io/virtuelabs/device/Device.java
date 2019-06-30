@@ -2,8 +2,8 @@ package io.virtuelabs.device;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.virtuelabs.device.service.impl.DeviceServiceImpl;
 import io.virtuelabs.device.ops.Health;
+import io.virtuelabs.device.service.impl.DeviceServiceImpl;
 
 import java.io.IOException;
 import java.util.logging.Level;
