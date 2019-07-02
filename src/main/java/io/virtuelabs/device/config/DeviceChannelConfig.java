@@ -21,7 +21,7 @@ public class DeviceChannelConfig {
   public static ManagedChannel getConfigurationManagedChannel(){
     if (configurationManagedChannel == null){
       configurationManagedChannel = ManagedChannelBuilder
-        .forAddress(System.getenv("IOT_CONFIGURATION_SERVICE"), 20001)
+        .forAddress(System.getenv("IOT_CONFIGURATION_SERVICE_HOST"), Integer.parseInt(System.getenv("IOT_CONFIGURATION_SERVICE_PORT")))
         .usePlaintext()
         .build();
     }
