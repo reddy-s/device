@@ -15,24 +15,31 @@ public class DeviceServiceImpl extends DeviceServiceGrpc.DeviceServiceImplBase {
   @Override
   public void sendEvent(DeviceRequest request, StreamObserver<DeviceResponse> responseObserver) {
 
-    String message;
     LOGGER.log(Level.INFO, "Received request form device: {0}", request.getDeviceId());
+
+    DeviceResponse deviceResponse;
+
     try {
       LOGGER.log(Level.INFO, "Processing request form device: {0}", request.getDeviceId());
       if (request.getRequestType() == RequestType.REGISTRATION){
         LOGGER.log(Level.INFO, "Fetching Configuration from config server");
         ConfigResponse configResponse = ConfigurationClient.fetchDeviceConfig(request);
-        message = String.format("Registration Event: Ping me every %d seconds", configResponse.getBeatFrequency());
+        deviceResponse = DeviceResponse.newBuilder()
+          .setAnomaly(false)
+          .setMessage(String.format("Registration Event: Ping me every %d seconds", configResponse.getBeatFrequency()))
+          .setHeartBeatFrequency(configResponse.getBeatFrequency())
+          .setResponseType(ResponseType.PROFILE)
+          .setNotify(false)
+          .build();
       } else {
-        message = "Non-Registration Event";
-      }
-
-      responseObserver.onNext(
-        DeviceResponse.newBuilder()
+        deviceResponse = DeviceResponse.newBuilder()
           .setAnomaly(true)
-          .setMessage(message)
-          .build()
-      );
+          .setMessage("Non-Registration Event")
+          .setResponseType(ResponseType.ACTION)
+          .setNotify(true)
+          .build();
+      }
+      responseObserver.onNext(deviceResponse);
     } catch (RuntimeException e) {
       responseObserver.onError(e);
       throw e;
